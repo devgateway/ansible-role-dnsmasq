@@ -1,0 +1,26 @@
+---
+- name: Install Dnsmasq package
+  package:
+      name: dnsmasq
+      state: present
+
+- name: Configure Debian defaults
+  when: ansible_os_family == "Debian"
+  lineinfile:
+      dest: /etc/default/dnsmasq
+      state: "{% if item.value == '' -%} absent {%- else -%} present {%- endif %}"
+      regexp: "^\\s*{{ item.key | upper }}="
+      line: "{{ item.key | upper }}={{ item.value }}"
+      insertafter: "^#\\s*{{ item.key | upper }}"
+  with_dict:
+      enabled: 1
+      ignore_resolvconf: "yes"
+      config_dir: ""
+  notify: Restart Dnsmasq
+
+- name: Configure daemon settings
+  template:
+      src: dnsmasq.conf.j2
+      dest: /etc/dnsmasq.conf
+  when: dnsmasq_config is defined
+  notify: Restart Dnsmasq
