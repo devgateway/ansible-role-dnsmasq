@@ -1,0 +1,10 @@
+galaxy_info:
+  author: Development Gateway
+  description: Configure Dnsmasq and zones
+  company: Development Gateway
+  license: GPLv3+
+  min_ansible_version: 2.1
+  galaxy_tags:
+    - dns
+    - dnsmasq
+dependencies: []
