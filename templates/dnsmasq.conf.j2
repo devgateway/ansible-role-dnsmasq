@@ -12,7 +12,9 @@
     {%- endfor -%}
 {%- endif -%}
 
-{%- if dnsmasq_zones is defined -%}
+{%- if dnsmasq_zones is defined %}
+no-hosts
+addn-hosts={{ dnsmasq_zone_dir }}{{ '\n' }}
     {%- for zone in dnsmasq_zones -%}
         {%- if zone.subnets is defined %}
             {%- set optional_subnets -%}

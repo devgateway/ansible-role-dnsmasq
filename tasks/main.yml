@@ -23,3 +23,18 @@
       src: dnsmasq.conf.j2
       dest: /etc/dnsmasq.conf
   notify: Restart Dnsmasq
+
+- name: Create zone directory
+  file:
+      path: "{{ dnsmasq_zone_dir }}"
+      state: directory
+  when: dnsmasq_zones is defined
+
+- name: Configure hosts file
+  template:
+      src: hosts.j2
+      dest: "{{ dnsmasq_zone_dir }}/{{ item.domain }}"
+  when: dnsmasq_zones is defined and item.hosts is defined
+  with_items: "{{ dnsmasq_zones }}"
+  notify: Reload Dnsmasq
+  tags: [ debug ]
