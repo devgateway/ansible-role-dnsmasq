@@ -1,0 +1,3 @@
+{% for hostname, host in zone.hosts.iteritems() %}
+{{ host.address }}{{ '\t' }}{{ hostname }}.{{ zone.domain }}
+{% endfor %}

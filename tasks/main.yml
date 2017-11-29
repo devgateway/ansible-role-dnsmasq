@@ -30,11 +30,12 @@
       state: directory
   when: dnsmasq_zones is defined
 
-- name: Configure hosts file
+- name: Configure zones
   template:
       src: hosts.j2
-      dest: "{{ dnsmasq_zone_dir }}/{{ item.domain }}"
-  when: dnsmasq_zones is defined and item.hosts is defined
+      dest: "{{ dnsmasq_zone_dir }}/{{ zone.domain }}"
+  when: dnsmasq_zones is defined and zone.hosts is defined
   with_items: "{{ dnsmasq_zones }}"
+  loop_control:
+      loop_var: zone
   notify: Reload Dnsmasq
-  tags: [ debug ]
