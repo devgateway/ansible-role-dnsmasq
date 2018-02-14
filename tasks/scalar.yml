@@ -1,0 +1,12 @@
+---
+- name: Set a scalar value
+  lineinfile:
+    path: "{{ dnsmasq_config[ansible_os_family] }}"
+    create: true
+    state: "{{ (option.value is sameas false) | ternary('absent', 'present') }}"
+    line: |-
+      {% if option.value is sameas true or option.value is sameas false %}
+      {{ option.key | lower | replace("_", "-") }}
+      {%- else %}
+      {{ option.key }}={{ option.value }}
+      {%- endif %}

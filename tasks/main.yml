@@ -1,41 +1,28 @@
 ---
 - name: Install Dnsmasq package
   package:
-      name: dnsmasq
-      state: present
+    name: dnsmasq
+    state: present
 
 - name: Configure Debian defaults
   when: ansible_os_family == "Debian"
   lineinfile:
-      dest: /etc/default/dnsmasq
-      state: "{% if item.value == '' -%} absent {%- else -%} present {%- endif %}"
-      regexp: "^\\s*{{ item.key | upper }}="
-      line: "{{ item.key | upper }}={{ item.value }}"
-      insertafter: "^#\\s*{{ item.key | upper }}"
+    dest: /etc/default/dnsmasq
+    state: "{% if item.value == '' -%} absent {%- else -%} present {%- endif %}"
+    regexp: "^\\s*{{ item.key | upper }}="
+    line: "{{ item.key | upper }}={{ item.value }}"
+    insertafter: "^#\\s*{{ item.key | upper }}"
   with_dict:
-      enabled: 1
-      ignore_resolvconf: "yes"
-      config_dir: ""
+    enabled: 1
+    ignore_resolvconf: "yes"
+    config_dir: ""
   notify: Restart Dnsmasq
 
 - name: Configure daemon settings
-  template:
-      src: dnsmasq.conf.j2
-      dest: /etc/dnsmasq.conf
-  notify: Restart Dnsmasq
-
-- name: Create zone directory
-  file:
-      path: "{{ dnsmasq_zone_dir }}"
-      state: directory
-  when: dnsmasq_zones is defined
-
-- name: Configure zones
-  template:
-      src: hosts.j2
-      dest: "{{ dnsmasq_zone_dir }}/{{ zone.domain }}"
-  when: dnsmasq_zones is defined and zone.hosts is defined
-  with_items: "{{ dnsmasq_zones }}"
+  include_tasks: >-
+    {{ (option.value is sequence and option.value is not string)
+    | ternary('sequence', 'scalar') }}.yml
+  with_dict: "{{ dnsmasq_settings }}"
   loop_control:
-      loop_var: zone
-  notify: Reload Dnsmasq
+    loop_var: option
+  notify: Restart Dnsmasq

@@ -1,2 +1,4 @@
 ---
-dnsmasq_zone_dir: /etc/dnsmasq.zones
+dnsmasq_config:
+  Debian: /etc/dnsmasq.conf
+  RedHat: /etc/dnsmasq.conf
