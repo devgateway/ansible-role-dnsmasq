@@ -3,8 +3,3 @@
   service:
     name: dnsmasq
     state: restarted
-
-- name: Reload Dnsmasq
-  service:
-    name: dnsmasq
-    state: "{{ (ansible_os_family == 'RedHat') | ternary('restarted', 'reloaded') }}"

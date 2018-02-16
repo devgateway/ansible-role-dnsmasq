@@ -1,0 +1,3 @@
+{% for hostname, host in zone.hosts | dictsort %}
+{{ host.address }}{{ '	' }}{{ hostname }}.{{ zone.domain }}
+{% endfor %}

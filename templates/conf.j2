@@ -1,0 +1,11 @@
+auth-zone={{ zone.domain }}
+{%- if zone.subnets is defined %}
+,{{ zone.subnets | join(',') }}
+{% endif %}
+{% for hostname, host in zone.hosts.iteritems() %}
+{% if host.cnames is defined %}
+{% for cname in host.cnames %}
+cname={{ cname }}.{{ zone.domain }},{{ hostname }}.{{ zone.domain }}
+{% endfor %}
+{% endif %}
+{% endfor %}

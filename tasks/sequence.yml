@@ -2,7 +2,6 @@
 - name: Set a sequence of values
   lineinfile:
     path: "{{ dnsmasq_config[ansible_os_family] }}"
-    create: true
     line: "{{ option.key }}={{ value }}"
   with_items: "{{ option.value }}"
   loop_control:

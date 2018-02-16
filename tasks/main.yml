@@ -18,11 +18,36 @@
     config_dir: ""
   notify: Restart Dnsmasq
 
-- name: Configure daemon settings
+- name: Configure Dnsmasq include directories
+  lineinfile:
+    path: "{{ dnsmasq_config[ansible_os_family] }}"
+    regexp: '{{ item.key }}="?{{ item.value }}"?'
+    line: '{{ item.key }}="{{ item.value }}"'
+  with_dict:
+    addn-hosts: "{{ dnsmasq_conf_d[ansible_os_family] }}/hosts"
+    conf-dir: "{{ dnsmasq_conf_d[ansible_os_family] }}"
+  when: dnsmasq_zones is defined
+  notify: Restart Dnsmasq
+
+- name: Configure other settings
   include_tasks: >-
     {{ (option.value is sequence and option.value is not string)
     | ternary('sequence', 'scalar') }}.yml
   with_dict: "{{ dnsmasq_settings }}"
   loop_control:
     loop_var: option
+  when: dnsmasq_settings is defined
   notify: Restart Dnsmasq
+
+- name: Create hosts directory
+  file:
+    state: directory
+    path: "{{ zone_path[ansible_os_family] }}"
+  when: dnsmasq_zones is defined
+
+- name: Configure zones
+  include_tasks: zone.yml
+  with_items: "{{ dnsmasq_zones }}"
+  loop_control:
+    loop_var: zone
+  when: dnsmasq_zones is defined
