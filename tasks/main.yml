@@ -8,14 +8,14 @@
   when: ansible_os_family == "Debian"
   lineinfile:
     dest: /etc/default/dnsmasq
-    state: "{% if item.value == '' -%} absent {%- else -%} present {%- endif %}"
-    regexp: "^\\s*{{ item.key | upper }}="
-    line: "{{ item.key | upper }}={{ item.value }}"
-    insertafter: "^#\\s*{{ item.key | upper }}"
+    state: "{{ (item.value is none) | ternary('absent', 'present') }}"
+    regexp: ^\s*{{ item.key }}=
+    line: "{{ item.key }}={{ item.value }}"
+    insertafter: ^#\s*{{ item.key }}
   with_dict:
-    enabled: 1
-    ignore_resolvconf: "yes"
-    config_dir: ""
+    ENABLED: 1
+    IGNORE_RESOLVCONF: "yes"
+    CONFIG_DIR: null
   notify: Restart Dnsmasq
 
 - name: Configure Dnsmasq include directories
