@@ -30,9 +30,12 @@
   notify: Restart Dnsmasq
 
 - name: Configure other settings
-  include_tasks: >-
-    {{ (option.value is sequence and option.value is not string)
-    | ternary('sequence', 'scalar') }}.yml
+  include_tasks: |-
+    {%  if option.value is sequence and option.value is not string -%}
+    {{    'sequence.yml' }}
+    {%- else -%}
+    {{    'scalar.yml' }}
+    {%- endif %}
   with_dict: "{{ dnsmasq_settings }}"
   loop_control:
     loop_var: option

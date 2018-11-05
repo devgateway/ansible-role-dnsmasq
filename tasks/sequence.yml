@@ -1,5 +1,5 @@
 ---
-- name: Set a sequence of values
+- name: Set {{ option.key }}
   lineinfile:
     path: "{{ dnsmasq_config[ansible_os_family] }}"
     line: "{{ option.key }}={{ value }}"
