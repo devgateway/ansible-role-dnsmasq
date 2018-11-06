@@ -2,7 +2,7 @@
 - name: Set {{ option.key }}
   lineinfile:
     path: "{{ dnsmasq_config[ansible_os_family] }}"
-    state: "{{ (option.value is sameas true) | ternary('present', 'absent') }}"
+    state: "{{ (option.value is sameas false) | ternary('absent', 'present') }}"
     line: |-
       {%  if option.value is sameas true or option.value is sameas false %}
       {{    option.key }}
