@@ -1,12 +1,12 @@
 ---
-- name: Configure zone {{ zone.domain }}
+- name: Configure zone {{ zone.key }}
   template:
     src: conf.j2
-    dest: "{{ dnsmasq_conf_d[ansible_os_family] }}/{{ zone.domain }}.conf"
+    dest: "{{ dnsmasq_conf_d[ansible_os_family] }}/{{ zone.key }}.conf"
   notify: Restart Dnsmasq
 
-- name: Configure zone {{ zone.domain }} hosts
+- name: Configure hosts in {{ zone.key }}
   template:
     src: hosts.j2
-    dest: "{{ zone_path[ansible_os_family] }}/{{ zone.domain }}"
+    dest: "{{ zone_path[ansible_os_family] }}/{{ zone.key }}"
   notify: Restart Dnsmasq

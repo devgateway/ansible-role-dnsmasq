@@ -50,7 +50,7 @@
 
 - name: Configure zones
   include_tasks: zone.yml
-  with_items: "{{ dnsmasq_zones }}"
+  with_dict: "{{ dnsmasq_zones }}"
   loop_control:
     loop_var: zone
   when: dnsmasq_zones is defined
