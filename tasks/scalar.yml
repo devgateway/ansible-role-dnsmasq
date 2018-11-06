@@ -9,3 +9,4 @@
       {%- else %}
       {{    '%s=%s' | format(option.key, option.value) }}
       {%- endif %}
+  notify: Restart Dnsmasq
