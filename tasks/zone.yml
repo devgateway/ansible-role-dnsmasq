@@ -2,11 +2,11 @@
 - name: Configure zone {{ zone.key }}
   template:
     src: conf.j2
-    dest: "{{ dnsmasq_dirs[ansible_os_family].conf_d }}/{{ zone.key }}.conf"
+    dest: "{{ dnsmasq_paths[ansible_os_family].conf_d }}/{{ zone.key }}.conf"
   notify: Dnsmasq configuration changed
 
 - name: Configure hosts in {{ zone.key }}
   template:
     src: hosts.j2
-    dest: "{{ dnsmasq_dirs[ansible_os_family].zones }}/{{ zone.key }}"
+    dest: "{{ dnsmasq_paths[ansible_os_family].zones }}/{{ zone.key }}"
   notify: Dnsmasq configuration changed

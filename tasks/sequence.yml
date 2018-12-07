@@ -1,7 +1,7 @@
 ---
 - name: Set {{ option.key }}
   lineinfile:
-    path: "{{ dnsmasq_dirs[ansible_os_family].config }}"
+    path: "{{ dnsmasq_paths[ansible_os_family].config }}"
     line: "{{ option.key }}={{ value }}"
   with_items: "{{ option.value }}"
   loop_control:

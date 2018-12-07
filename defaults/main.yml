@@ -1,7 +1,7 @@
 ---
-dnsmasq_dirs:
+dnsmasq_paths:
   Debian:
-    config: /etc
+    config: /etc/dnsmasq.conf
     conf_d: /etc/dnsmasq.d
     zones:  /etc/dnsmasq.d/hosts
   RedHat:

@@ -15,12 +15,12 @@
 
 - name: Configure Dnsmasq include directories
   lineinfile:
-    path: "{{ dnsmasq_dirs[ansible_os_family].config }}"
+    path: "{{ dnsmasq_paths[ansible_os_family].config }}"
     regexp: '{{ item.key }}="?{{ item.value }}"?'
     line: '{{ item.key }}="{{ item.value }}"'
   with_dict:
-    addn-hosts: "{{ dnsmasq_dirs[ansible_os_family].conf_d }}/hosts"
-    conf-dir: "{{ dnsmasq_dirs[ansible_os_family].conf_d }}"
+    addn-hosts: "{{ dnsmasq_paths[ansible_os_family].conf_d }}/hosts"
+    conf-dir: "{{ dnsmasq_paths[ansible_os_family].conf_d }}"
   when: dnsmasq_zones is defined
   notify: Dnsmasq configuration changed
 
@@ -40,7 +40,7 @@
 - name: Create hosts directory
   file:
     state: directory
-    path: "{{ dnsmasq_dirs[ansible_os_family].zones }}"
+    path: "{{ dnsmasq_paths[ansible_os_family].zones }}"
   when: dnsmasq_zones is defined
 
 - name: Configure zones
