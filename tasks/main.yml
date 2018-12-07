@@ -1,4 +1,13 @@
 ---
+- name: Create directories
+  file:
+    state: directory
+    path: "{{ item }}"
+  loop:
+    - "{{ dnsmasq_paths[ansible_os_family].config | dirname }}"
+    - "{{ dnsmasq_paths[ansible_os_family].zones }}"
+    - "{{ dnsmasq_paths[ansible_os_family].conf_d }}"
+
 - name: Configure Debian defaults
   when: ansible_os_family == "Debian"
   lineinfile:
@@ -19,7 +28,7 @@
     regexp: '{{ item.key }}="?{{ item.value }}"?'
     line: '{{ item.key }}="{{ item.value }}"'
   with_dict:
-    addn-hosts: "{{ dnsmasq_paths[ansible_os_family].conf_d }}/hosts"
+    addn-hosts: "{{ dnsmasq_paths[ansible_os_family].zones }}"
     conf-dir: "{{ dnsmasq_paths[ansible_os_family].conf_d }}"
   when: dnsmasq_zones is defined
   notify: Dnsmasq configuration changed
@@ -36,12 +45,6 @@
     loop_var: option
   when: dnsmasq_settings is defined
   notify: Dnsmasq configuration changed
-
-- name: Create hosts directory
-  file:
-    state: directory
-    path: "{{ dnsmasq_paths[ansible_os_family].zones }}"
-  when: dnsmasq_zones is defined
 
 - name: Configure zones
   include_tasks: zone.yml
