@@ -1,9 +1,4 @@
 ---
-- name: Install Dnsmasq package
-  package:
-    name: dnsmasq
-    state: present
-
 - name: Configure Debian defaults
   when: ansible_os_family == "Debian"
   lineinfile:
