@@ -6,4 +6,4 @@
   with_items: "{{ option.value }}"
   loop_control:
     loop_var: value
-  notify: Restart Dnsmasq
+  notify: Dnsmasq configuration changed
