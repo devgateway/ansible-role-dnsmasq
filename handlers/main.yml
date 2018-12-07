@@ -1,5 +1,4 @@
 ---
-- name: Restart Dnsmasq
-  service:
-    name: dnsmasq
-    state: restarted
+- name: Dnsmasq configuration changed
+  debug:
+    msg: Dnsmasq configuration changed

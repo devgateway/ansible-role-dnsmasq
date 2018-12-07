@@ -11,7 +11,7 @@
     ENABLED: 1
     IGNORE_RESOLVCONF: "yes"
     CONFIG_DIR: null
-  notify: Restart Dnsmasq
+  notify: Dnsmasq configuration changed
 
 - name: Configure Dnsmasq include directories
   lineinfile:
@@ -22,7 +22,7 @@
     addn-hosts: "{{ dnsmasq_conf_d[ansible_os_family] }}/hosts"
     conf-dir: "{{ dnsmasq_conf_d[ansible_os_family] }}"
   when: dnsmasq_zones is defined
-  notify: Restart Dnsmasq
+  notify: Dnsmasq configuration changed
 
 - name: Configure other settings
   include_tasks: |-
@@ -35,7 +35,7 @@
   loop_control:
     loop_var: option
   when: dnsmasq_settings is defined
-  notify: Restart Dnsmasq
+  notify: Dnsmasq configuration changed
 
 - name: Create hosts directory
   file:
