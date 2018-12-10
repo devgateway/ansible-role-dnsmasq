@@ -24,6 +24,7 @@
 
 - name: Configure Dnsmasq include directories
   lineinfile:
+    create: true
     path: "{{ dnsmasq_paths[ansible_os_family].config }}"
     regexp: '{{ item.key }}="?{{ item.value }}"?'
     line: '{{ item.key }}="{{ item.value }}"'
